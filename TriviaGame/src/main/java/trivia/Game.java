@@ -10,27 +10,24 @@ public class Game implements IGame {
    int[] purses = new int[6];
    boolean[] inPenaltyBox = new boolean[6];
 
-   LinkedList popQuestions = new LinkedList();
-   LinkedList scienceQuestions = new LinkedList();
-   LinkedList sportsQuestions = new LinkedList();
-   LinkedList rockQuestions = new LinkedList();
+   Pop popQuestions = new Pop();
+   Sciences scienceQuestions = new Sciences();
+   Sport sportsQuestions = new Sport();
+   Rock rockQuestions = new Rock();
 
    int currentPlayer = 0;
    boolean isGettingOutOfPenaltyBox;
 
    public Game() {
       for (int i = 0; i < 50; i++) {
-         popQuestions.addLast("Pop Question " + i);
-         scienceQuestions.addLast(("Science Question " + i));
-         sportsQuestions.addLast(("Sports Question " + i));
-         rockQuestions.addLast(createRockQuestion(i));
+         popQuestions.addQuestion(i);
+         scienceQuestions.addQuestion(i);
+         sportsQuestions.addQuestion(i);
+         rockQuestions.addQuestion(i);
       }
    }
 
-   public String createRockQuestion(int index) {
-      return "Rock Question " + index;
-   }
-
+   // A utiliser
    public boolean isPlayable() {
       return (howManyPlayers() >= 2);
    }
@@ -38,7 +35,7 @@ public class Game implements IGame {
    public boolean add(String playerName) {
       places[howManyPlayers()] = 1;
       purses[howManyPlayers()] = 0;
-      inPenaltyBox[howManyPlayers()] = false;
+      inPenaltyBox[howManyPlayers()] = false; //nom bizarre
       players.add(playerName);
 
       System.out.println(playerName + " was added");
@@ -46,6 +43,7 @@ public class Game implements IGame {
       return true;
    }
 
+   //changer nom pour avec un getter
    public int howManyPlayers() {
       return players.size();
    }
@@ -86,6 +84,7 @@ public class Game implements IGame {
 
    }
 
+   // dans la classe abstraite
    private void askQuestion() {
       if (currentCategory() == "Pop")
          System.out.println(popQuestions.removeFirst());
@@ -98,6 +97,7 @@ public class Game implements IGame {
    }
 
 
+   //a changer
    private String currentCategory() {
       if (places[currentPlayer] - 1 == 0) return "Pop";
       if (places[currentPlayer] - 1 == 4) return "Pop";
@@ -111,10 +111,11 @@ public class Game implements IGame {
       return "Rock";
    }
 
+   //a changer
    public boolean handleCorrectAnswer() {
       if (inPenaltyBox[currentPlayer]) {
          if (isGettingOutOfPenaltyBox) {
-            System.out.println("Answer was corrent!!!!");
+            System.out.println("Answer was correct!!!!");
             purses[currentPlayer]++;
             System.out.println(players.get(currentPlayer)
                                + " now has "
@@ -135,7 +136,7 @@ public class Game implements IGame {
 
       } else {
 
-         System.out.println("Answer was corrent!!!!");
+         System.out.println("Answer was correct!!!!");
          purses[currentPlayer]++;
          System.out.println(players.get(currentPlayer)
                             + " now has "
