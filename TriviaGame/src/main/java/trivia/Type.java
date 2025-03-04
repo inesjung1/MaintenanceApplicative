@@ -20,4 +20,10 @@ public class Type {
     public void addQuestion(int question) {
         questions.add(this.name + " Question: " + question);
     }
+
+    //enlever la premiere question
+    public LinkedList<String> removeFirstQuestion() {
+        questions.removeFirst();
+        return questions;
+    }
 }

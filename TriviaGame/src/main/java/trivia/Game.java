@@ -1,7 +1,6 @@
 package trivia;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 // REFACTOR ME
 public class Game implements IGame {
@@ -29,13 +28,13 @@ public class Game implements IGame {
 
    // A utiliser
    public boolean isPlayable() {
-      return (howManyPlayers() >= 2);
+      return (getNbPlayers() >= 2);
    }
 
    public boolean add(String playerName) {
-      places[howManyPlayers()] = 1;
-      purses[howManyPlayers()] = 0;
-      inPenaltyBox[howManyPlayers()] = false; //nom bizarre
+      places[getNbPlayers()] = 1;
+      purses[getNbPlayers()] = 0;
+      inPenaltyBox[getNbPlayers()] = false; //nom bizarre
       players.add(playerName);
 
       System.out.println(playerName + " was added");
@@ -44,7 +43,7 @@ public class Game implements IGame {
    }
 
    //changer nom pour avec un getter
-   public int howManyPlayers() {
+   public int getNbPlayers() {
       return players.size();
    }
 
@@ -87,53 +86,44 @@ public class Game implements IGame {
    // dans la classe abstraite
    private void askQuestion() {
       if (currentCategory() == "Pop")
-         System.out.println(popQuestions.removeFirst());
+         System.out.println(popQuestions.removeFirstQuestion());
       if (currentCategory() == "Science")
-         System.out.println(scienceQuestions.removeFirst());
+         System.out.println(scienceQuestions.removeFirstQuestion());
       if (currentCategory() == "Sports")
-         System.out.println(sportsQuestions.removeFirst());
+         System.out.println(sportsQuestions.removeFirstQuestion());
       if (currentCategory() == "Rock")
-         System.out.println(rockQuestions.removeFirst());
+         System.out.println(rockQuestions.removeFirstQuestion());
    }
 
 
    //a changer
    private String currentCategory() {
-      if (places[currentPlayer] - 1 == 0) return "Pop";
-      if (places[currentPlayer] - 1 == 4) return "Pop";
-      if (places[currentPlayer] - 1 == 8) return "Pop";
-      if (places[currentPlayer] - 1 == 1) return "Science";
-      if (places[currentPlayer] - 1 == 5) return "Science";
-      if (places[currentPlayer] - 1 == 9) return "Science";
-      if (places[currentPlayer] - 1 == 2) return "Sports";
-      if (places[currentPlayer] - 1 == 6) return "Sports";
-      if (places[currentPlayer] - 1 == 10) return "Sports";
-      return "Rock";
+      switch (places[currentPlayer] - 1) {
+         case 0:
+         case 4:
+         case 8:
+            return popQuestions.getName();
+         case 1:
+         case 5:
+         case 9:
+            return scienceQuestions.getName();
+         case 2:
+         case 6:
+         case 10:
+            return sportsQuestions.getName();
+         default:
+            return rockQuestions.getName();
+      }
    }
 
    //a changer
    public boolean handleCorrectAnswer() {
-      if (inPenaltyBox[currentPlayer]) {
-         if (isGettingOutOfPenaltyBox) {
-            System.out.println("Answer was correct!!!!");
-            purses[currentPlayer]++;
-            System.out.println(players.get(currentPlayer)
-                               + " now has "
-                               + purses[currentPlayer]
-                               + " Gold Coins.");
-
-            boolean winner = didPlayerWin();
-            currentPlayer++;
-            if (currentPlayer == players.size()) currentPlayer = 0;
-
-            return winner;
-         } else {
+      if (inPenaltyBox[currentPlayer] && !isGettingOutOfPenaltyBox) {
+         {
             currentPlayer++;
             if (currentPlayer == players.size()) currentPlayer = 0;
             return true;
          }
-
-
       } else {
 
          System.out.println("Answer was correct!!!!");
