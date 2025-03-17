@@ -18,18 +18,15 @@ public class ListeEvents {
         this.events = new ArrayList<>();
     }
 
-    public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-                             String lieu, String participants, int frequenceJours) {
-        Event e = switch (type) {
-            case "RDV_PERSONNEL" -> new PersonalMeeting(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes);
-            case "REUNION" -> new Reunion(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes, new Location(lieu), new Participants(participants));
-            case "PERIODIQUE" -> new PeriodicEvent(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes, frequenceJours);
-            default -> throw new IllegalArgumentException("Type d'événement inconnu : " + type);
-        };
+    public void ajouterEvent(Event e) {
         events.add(e);
     }
 
     public void afficherEvenements() {
         events.forEach(event -> System.out.println(event.description()));
+    }
+
+    public List<Event> getEvents() {
+        return events;
     }
 } 

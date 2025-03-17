@@ -19,4 +19,6 @@ public abstract class Event {
     }
 
     public abstract String description();
+
+    public abstract boolean dansPeriode(LocalDateTime debut, LocalDateTime fin);
 }

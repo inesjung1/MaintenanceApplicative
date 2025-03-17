@@ -1,8 +1,9 @@
-import event.Event;
+import event.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalendarManager {
     private ListeEvents listeEvents;
@@ -13,7 +14,8 @@ public class CalendarManager {
 
     public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
                              String lieu, String participants, int frequenceJours) {
-        listeEvents.ajouterEvent(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
+        Event e = EventFactory.creerEvent(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
+        listeEvents.ajouterEvent(e);
     }
 
     public void afficherEvenements() {
@@ -21,36 +23,15 @@ public class CalendarManager {
     }
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        List<Event> result = new ArrayList<>();
-        for (Event e : events) {
-            if (e.type.equals("PERIODIQUE")) {
-                LocalDateTime temp = e.dateDebut;
-                while (temp.isBefore(fin)) {
-                    if (!temp.isBefore(debut)) {
-                        result.add(e);
-                        break;
-                    }
-                    temp = temp.plusDays(e.frequenceJours);
-                }
-            } else if (!e.dateDebut.isBefore(debut) && !e.dateDebut.isAfter(fin)) {
-                result.add(e);
-            }
-        }
-        return result;
+        return listeEvents.getEvents().stream()
+                .filter(e -> e.dansPeriode(debut, fin))
+                .collect(Collectors.toList());
     }
 
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes);
-        LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes);
-
-        if (e1.type.equals("PERIODIQUE") || e2.type.equals("PERIODIQUE")) {
-            return false; // Simplification abusive
-        }
-
-        if (e1.dateDebut.isBefore(fin2) && fin1.isAfter(e2.dateDebut)) {
-            return true;
-        }
-        return false;
+        return !(e1 instanceof PeriodicEvent || e2 instanceof PeriodicEvent) &&
+                e1.dateDebut.isBefore(e2.dateDebut.plusMinutes(e2.dureeMinutes)) &&
+                e1.dateDebut.plusMinutes(e1.dureeMinutes).isAfter(e2.dateDebut);
     }
 
 }

@@ -15,6 +15,10 @@ public class PersonalMeeting extends Event {
     public String description() {
         return "RDV : " + title.getValue() + " à " + dateDebut.toString();
     }
+
+    public boolean dansPeriode(LocalDateTime debut, LocalDateTime fin) {
+        return dateDebut.isAfter(debut) && dateDebut.isBefore(fin);
+    }
 }
 
 
