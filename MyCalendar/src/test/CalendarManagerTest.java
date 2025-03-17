@@ -1,4 +1,5 @@
 // CalendarManagerTest.java
+import event.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

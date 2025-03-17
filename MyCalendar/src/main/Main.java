@@ -1,3 +1,5 @@
+import event.Event;
+
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.List;
@@ -206,7 +208,7 @@ public class Main {
                         System.out.println("Ajouter un participant ? (oui / non)");
                         while (scanner.nextLine().equals("oui"))
                         {
-                            System.out.print("Participants : " + participants);
+                            System.out.print("type.Participants : " + participants);
                             participants += ", " + scanner.nextLine();
                         }
 

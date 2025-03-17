@@ -1,3 +1,8 @@
+package event;
+
+import type.Owner;
+import type.Title;
+
 import java.time.LocalDateTime;
 
 public abstract class Event {

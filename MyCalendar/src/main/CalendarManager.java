@@ -1,18 +1,23 @@
+import event.Event;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarManager {
-    public List<Event> events;
+    private ListeEvents listeEvents;
 
     public CalendarManager() {
-        this.events = new ArrayList<>();
+        this.listeEvents = new ListeEvents();
     }
 
     public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
                              String lieu, String participants, int frequenceJours) {
-        Event e = new Event(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
-        events.add(e);
+        listeEvents.ajouterEvent(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
+    }
+
+    public void afficherEvenements() {
+        listeEvents.afficherEvenements();
     }
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
@@ -48,9 +53,4 @@ public class CalendarManager {
         return false;
     }
 
-    public void afficherEvenements() {
-        for (Event e : events) {
-            System.out.println(e.description());
-        }
-    }
 }

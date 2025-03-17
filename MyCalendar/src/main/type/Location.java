@@ -1,3 +1,5 @@
+package type;
+
 public class Location {
     private String value;
     public Location(String value) { this.value = value; }

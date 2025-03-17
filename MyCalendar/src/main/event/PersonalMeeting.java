@@ -1,3 +1,9 @@
+package event;
+
+import event.Event;
+import type.Owner;
+import type.Title;
+
 import java.time.LocalDateTime;
 
 public class PersonalMeeting extends Event {

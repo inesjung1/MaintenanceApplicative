@@ -1,3 +1,5 @@
+package type;
+
 public class Participants {
     private String value;
     public Participants(String value) { this.value = value; }

@@ -1,6 +1,14 @@
+package event;
+
+import event.Event;
+import type.Location;
+import type.Owner;
+import type.Participants;
+import type.Title;
+
 import java.time.LocalDateTime;
 
-class Reunion extends Event {
+public class Reunion extends Event {
     private Location lieu;
     private Participants participants;
 
