@@ -1,14 +1,11 @@
 package event;
 
-import type.Location;
-import type.Owner;
-import type.Participants;
-import type.Title;
+import type.*;
 
 import java.time.LocalDateTime;
 
 public class EventFactory {
-    public static Event creerEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
+    public static Event creerEvent(String type, String title, String proprietaire, DateEvenement dateDebut, int dureeMinutes,
                                    String lieu, String participants, int frequenceJours) {
         return switch (type) {
             case "RDV_PERSONNEL" -> new PersonalMeeting(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes);

@@ -1,15 +1,17 @@
 package event;
 
 import event.Event;
+import type.DateEvenement;
 import type.Owner;
 import type.Title;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 public class PeriodicEvent extends Event {
     private Integer frequenceJours;
 
-    public PeriodicEvent(Title title, Owner proprietaire, LocalDateTime dateDebut, Integer dureeMinutes, Integer frequenceJours) {
+    public PeriodicEvent(Title title, Owner proprietaire, DateEvenement dateDebut, Integer dureeMinutes, Integer frequenceJours) {
         super(title, proprietaire, dateDebut, dureeMinutes);
         this.frequenceJours = frequenceJours;
     }
@@ -20,15 +22,11 @@ public class PeriodicEvent extends Event {
     }
 
     public boolean dansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        LocalDateTime occurrence = dateDebut;
-        while (occurrence.isBefore(fin)) {
-            if (!occurrence.isBefore(debut)) {
-                return true;
-            }
-            occurrence = occurrence.plusDays(frequenceJours);
-        }
-        return false;
+        return Stream.iterate(dateDebut, d -> d.plusDays(frequenceJours))
+                .takeWhile(d -> d.isBefore(fin))
+                .anyMatch(d -> !d.isBefore(debut));
     }
+
 
     public Integer getFrequenceJours() {
         return frequenceJours;

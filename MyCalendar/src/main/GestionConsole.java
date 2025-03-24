@@ -1,4 +1,5 @@
 import event.Event;
+import type.DateEvenement;
 import type.Utilisateur;
 
 import java.time.LocalDateTime;
@@ -10,15 +11,16 @@ import java.util.stream.Stream;
 
 public class GestionConsole {
 
-    public static LocalDateTime lireDateHeure(Scanner scanner) {
-        int annee = Integer.parseInt(lireChamp("Année (AAAA) : ", scanner));
-        int mois = Integer.parseInt(lireChamp("Mois (1-12) : ", scanner));
-        int jour = Integer.parseInt(lireChamp("Jour (1-31) : ", scanner));
-        int heure = Integer.parseInt(lireChamp("Heure début (0-23) : ", scanner));
-        int minute = Integer.parseInt(lireChamp("Minute début (0-59) : ", scanner));
+    public static DateEvenement lireDateEvenement(Scanner scanner) {
+        int annee = Integer.parseInt(lireChamp("Année (AAAA) :", scanner));
+        int mois = Integer.parseInt(lireChamp("Mois (1-12) :", scanner));
+        int jour = Integer.parseInt(lireChamp("Jour (1-31) :", scanner));
+        int heure = Integer.parseInt(lireChamp("Heure début (0-23) :", scanner));
+        int minute = Integer.parseInt(lireChamp("Minute début (0-59) :", scanner));
 
-        return LocalDateTime.of(annee, mois, jour, heure, minute);
+        return new DateEvenement(annee, mois, jour, heure, minute);
     }
+
 
     public static String lireChamp(String message, Scanner scanner) {
         System.out.print(message + " ");
@@ -185,11 +187,11 @@ public class GestionConsole {
 
     public static void ajouterRdvPersonnel(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
         String titre = lireChamp("Titre de l'événement :", scanner);
-        LocalDateTime dateHeure = lireDateHeure(scanner);
+        DateEvenement date = lireDateEvenement(scanner);
         int duree = Integer.parseInt(lireChamp("Durée (en minutes) :", scanner));
 
         calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur.getNom(),
-                dateHeure, duree, "", "", 0);
+                date, duree, "", "", 0);
 
         System.out.println("Événement ajouté.");
     }
@@ -197,7 +199,7 @@ public class GestionConsole {
 
     public static void ajouterReunion(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
         String titre = lireChamp("Titre de l'événement :", scanner);
-        LocalDateTime dateHeure = lireDateHeure(scanner);
+        DateEvenement date = lireDateEvenement(scanner);
         int duree = Integer.parseInt(lireChamp("Durée (en minutes) :", scanner));
         String lieu = lireChamp("Lieu :", scanner);
 
@@ -214,18 +216,18 @@ public class GestionConsole {
         participants.add(0, utilisateur.getNom());
 
         calendar.ajouterEvent("REUNION", titre, utilisateur.getNom(),
-                dateHeure, duree, lieu, String.join(", ", participants), 0);
+                date, duree, lieu, String.join(", ", participants), 0);
 
         System.out.println("Événement ajouté.");
     }
 
     public static void ajouterPeriodique(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
         String titre = lireChamp("Titre de l'événement :", scanner);
-        LocalDateTime dateHeure = lireDateHeure(scanner);
+        DateEvenement date = lireDateEvenement(scanner);
         int frequence = Integer.parseInt(lireChamp("Fréquence (en jours) :", scanner));
 
         calendar.ajouterEvent("PERIODIQUE", titre, utilisateur.getNom(),
-                dateHeure, 0, "", "", frequence);
+                date, 0, "", "", frequence);
 
         System.out.println("Événement ajouté.");
     }
