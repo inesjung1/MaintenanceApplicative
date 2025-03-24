@@ -5,12 +5,12 @@ import type.*;
 import java.time.LocalDateTime;
 
 public class EventFactory {
-    public static Event creerEvent(String type, String title, String proprietaire, DateEvenement dateDebut, int dureeMinutes,
-                                   String lieu, String participants, int frequenceJours) {
+    public static Event creerEvent(String type, Title title, String proprietaire, DateEvenement dateDebut, Duree dureeMinutes,
+                                   Location lieu, String participants, int frequenceJours) {
         return switch (type) {
-            case "RDV_PERSONNEL" -> new PersonalMeeting(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes);
-            case "REUNION" -> new Reunion(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes, new Location(lieu), new Participants(participants));
-            case "PERIODIQUE" -> new PeriodicEvent(new Title(title), new Owner(proprietaire), dateDebut, dureeMinutes, frequenceJours);
+            case "RDV_PERSONNEL" -> new PersonalMeeting(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes());
+            case "REUNION" -> new Reunion(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes(), lieu, new Participants(participants));
+            case "PERIODIQUE" -> new PeriodicEvent(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes(), frequenceJours);
             default -> throw new IllegalArgumentException("Type d'événement inconnu : " + type);
         };
     }

@@ -5,6 +5,9 @@ import event.PersonalMeeting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import type.DateEvenement;
+import type.Duree;
+import type.Location;
+import type.Title;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +25,11 @@ public class CalendarManagerTest {
     @Test
     public void testAjouterEvent() {
         DateEvenement dateDebut = new DateEvenement(2023, 10, 10, 10, 0);
-        calendarManager.ajouterEvent("RDV_PERSONNEL", "Dentist", "Alice", dateDebut, 30, "", "", 0);
+        Title title = new Title("Dentist");
+        Duree duree = new Duree(30);
+        Location lieu = new Location("");
+
+        calendarManager.ajouterEvent("RDV_PERSONNEL", title, "Alice", dateDebut, duree, lieu, "", 0);
         assertEquals(1, calendarManager.eventsDansPeriode(LocalDateTime.of(2023, 10, 10, 0, 0), LocalDateTime.of(2023, 10, 10, 23, 59)).size());
     }
 
@@ -30,8 +37,13 @@ public class CalendarManagerTest {
     public void testEventsDansPeriode() {
         DateEvenement dateDebut1 = new DateEvenement(2023, 10, 10, 10, 0);
         DateEvenement dateDebut2 = new DateEvenement(2023, 10, 15, 10, 0);
-        calendarManager.ajouterEvent("RDV_PERSONNEL", "Dentist", "Alice", dateDebut1, 30, "", "", 0);
-        calendarManager.ajouterEvent("RDV_PERSONNEL", "Meeting", "Bob", dateDebut2, 60, "", "", 0);
+        Duree duree1 = new Duree(30);
+        Duree duree2 = new Duree(60);
+        Title title1 = new Title("Dentist");
+        Title title2 = new Title("Meeting");
+        Location lieu = new Location("");
+        calendarManager.ajouterEvent("RDV_PERSONNEL", title1, "Alice", dateDebut1, duree1, lieu, "", 0);
+        calendarManager.ajouterEvent("RDV_PERSONNEL", title2, "Bob", dateDebut2, duree2, lieu, "", 0);
 
         LocalDateTime debut = LocalDateTime.of(2023, 10, 1, 0, 0);
         LocalDateTime fin = LocalDateTime.of(2023, 10, 20, 23, 59);
@@ -44,8 +56,13 @@ public class CalendarManagerTest {
     public void testConflit() {
         DateEvenement dateDebut1 = new DateEvenement(2023, 10, 10, 10, 0);
         DateEvenement dateDebut2 = new DateEvenement(2023, 10, 10, 10, 30);
-        Event event1 = new EventFactory().creerEvent("RDV_PERSONNEL", "Dentist", "Alice", dateDebut1, 30, "", "", 0);
-        Event event2 = new EventFactory().creerEvent("RDV_PERSONNEL", "Meeting", "Bob", dateDebut2, 60, "", "", 0);
+        Duree duree1 = new Duree(30);
+        Duree duree2 = new Duree(60);
+        Title title1 = new Title("Dentist");
+        Title title2 = new Title("Meeting");
+        Location lieu = new Location("");
+        Event event1 = new EventFactory().creerEvent("RDV_PERSONNEL", title1, "Alice", dateDebut1, duree1, lieu, "", 0);
+        Event event2 = new EventFactory().creerEvent("RDV_PERSONNEL", title2, "Bob", dateDebut2, duree2, lieu, "", 0);
 
         assertTrue(calendarManager.conflit(event1, event2));
     }

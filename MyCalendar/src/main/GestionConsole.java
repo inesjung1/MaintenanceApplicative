@@ -1,6 +1,5 @@
 import event.Event;
-import type.DateEvenement;
-import type.Utilisateur;
+import type.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
@@ -186,22 +185,23 @@ public class GestionConsole {
     }
 
     public static void ajouterRdvPersonnel(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
-        String titre = lireChamp("Titre de l'événement :", scanner);
+        Title titre = new Title(lireChamp("Titre de l'événement :", scanner));
         DateEvenement date = lireDateEvenement(scanner);
-        int duree = Integer.parseInt(lireChamp("Durée (en minutes) :", scanner));
+        Duree duree = new Duree(Integer.parseInt(lireChamp("Durée (en minutes) :", scanner)));
+        Location lieu = new Location("");
 
         calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur.getNom(),
-                date, duree, "", "", 0);
+                date, duree, lieu, "", 0);
 
         System.out.println("Événement ajouté.");
     }
 
 
     public static void ajouterReunion(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
-        String titre = lireChamp("Titre de l'événement :", scanner);
+        Title titre = new Title(lireChamp("Titre de l'événement :", scanner));
         DateEvenement date = lireDateEvenement(scanner);
-        int duree = Integer.parseInt(lireChamp("Durée (en minutes) :", scanner));
-        String lieu = lireChamp("Lieu :", scanner);
+        Duree duree = new Duree(Integer.parseInt(lireChamp("Durée (en minutes) :", scanner)));
+        Location lieu = new Location(lireChamp("Lieu :", scanner));
 
         System.out.println("Ajouter un participant ? (oui / non)");
 
@@ -222,12 +222,14 @@ public class GestionConsole {
     }
 
     public static void ajouterPeriodique(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
-        String titre = lireChamp("Titre de l'événement :", scanner);
+        Title titre = new Title(lireChamp("Titre de l'événement :", scanner));
         DateEvenement date = lireDateEvenement(scanner);
         int frequence = Integer.parseInt(lireChamp("Fréquence (en jours) :", scanner));
+        Duree dureeMin = new Duree(0);
+        Location lieu = new Location("");
 
         calendar.ajouterEvent("PERIODIQUE", titre, utilisateur.getNom(),
-                date, 0, "", "", frequence);
+                date, dureeMin, lieu, "", frequence);
 
         System.out.println("Événement ajouté.");
     }
