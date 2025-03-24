@@ -111,7 +111,8 @@ public class GestionConsole {
         System.out.println("2 - Ajouter un rendez-vous perso");
         System.out.println("3 - Ajouter une réunion");
         System.out.println("4 - Ajouter un évènement périodique");
-        System.out.println("5 - Se déconnecter");
+        System.out.println("5 - Ajouter un anniversaire");
+        System.out.println("6 - Se déconnecter");
 
         String choix = lireChamp("Votre choix : ", scanner);
 
@@ -121,7 +122,8 @@ public class GestionConsole {
         actions.put("2", () -> ajouterRdvPersonnel(calendar, scanner, utilisateur));
         actions.put("3", () -> ajouterReunion(calendar, scanner, utilisateur));
         actions.put("4", () -> ajouterPeriodique(calendar, scanner, utilisateur));
-        actions.put("5", () -> Optional.ofNullable(lireChamp("Déconnexion ! Voulez-vous continuer ? (oui / non)", scanner))
+        actions.put("5", () -> ajouterAnniversaire(calendar, scanner, utilisateur));
+        actions.put("6", () -> Optional.ofNullable(lireChamp("Déconnexion ! Voulez-vous continuer ? (oui / non)", scanner))
                 .filter(rep -> rep.trim().equalsIgnoreCase("oui"))
                 .ifPresentOrElse(
                         rep -> retourConnexion.run(),
@@ -132,11 +134,12 @@ public class GestionConsole {
                 .orElse(() -> System.out.println("Choix invalide"))
                 .run();
 
-        // récursion tant qu'on ne choisit pas 5
+        // récursion tant qu'on ne choisit pas 6
         Optional.of(choix)
-                .filter(c -> !c.equals("5"))
+                .filter(c -> !c.equals("6"))
                 .ifPresent(c -> boucleUtilisateur(utilisateur, scanner, calendar, retourConnexion));
     }
+
 
 
 
@@ -233,4 +236,33 @@ public class GestionConsole {
 
         System.out.println("Événement ajouté.");
     }
+
+    public static void ajouterAnniversaire(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
+        Title titre = new Title(lireChamp("Titre de l'anniversaire :", scanner));
+        DateEvenement date = lireDateEvenement(scanner);
+        Duree duree = new Duree(0); // les anniversaires n’ont pas forcément besoin de durée
+        Location lieu = new Location(lireChamp("Lieu de la fête :", scanner));
+
+        System.out.println("Ajouter un invité ? (oui / non)");
+
+        List<String> invites = Stream
+                .iterate(scanner.nextLine(), reponse -> reponse.equalsIgnoreCase("oui"), reponse -> {
+                    System.out.print("Ajouter un autre invité ? (oui / non) : ");
+                    return scanner.nextLine();
+                })
+                .map(reponse -> lireChamp("Nom de l'invité :", scanner))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // On ajoute la personne elle-même comme organisateur
+        invites.add(0, utilisateur.getNom());
+
+        Participants participants = new Participants(String.join(", ", invites));
+        Owner proprietaire = new Owner(utilisateur.getNom());
+
+        calendar.ajouterEvent("ANNIVERSAIRE", titre, proprietaire.getValue(),
+                date, duree, lieu, participants.getValue(), 0);
+
+        System.out.println("Anniversaire ajouté !");
+    }
+
 }
