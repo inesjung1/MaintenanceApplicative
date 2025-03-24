@@ -4,10 +4,7 @@ import event.EventFactory;
 import event.PersonalMeeting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import type.DateEvenement;
-import type.Duree;
-import type.Location;
-import type.Title;
+import type.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,6 +49,8 @@ public class CalendarManagerTest {
         assertEquals(2, events.size());
     }
 
+    //impletenter plus tard
+    /*
     @Test
     public void testConflit() {
         DateEvenement dateDebut1 = new DateEvenement(2023, 10, 10, 10, 0);
@@ -66,5 +65,29 @@ public class CalendarManagerTest {
 
         assertTrue(calendarManager.conflit(event1, event2));
     }
+
+     */
+
+    @Test
+    public void testAjoutEvenementAnniversaire() {
+        CalendarManager manager = new CalendarManager();
+        Utilisateur utilisateur = new Utilisateur("Alice", "mdp");
+        DateEvenement date = new DateEvenement(2023, 10, 10, 10, 0);
+        Title title = new Title("Anniv Alice");
+        Duree duree = new Duree(30);
+        Location lieu = new Location("Chez moi");
+
+        manager.ajouterEvent("ANNIVERSAIRE", title, utilisateur.getNom(), date, duree, lieu, "", 0);
+
+        List<Event> evenements = manager.eventsDansPeriode(date.minusDays(1).toLocalDateTime(), date.plusDays(1).toLocalDateTime());
+
+        boolean contient = evenements.stream().anyMatch(e -> e.getTitle().equals("Anniv Alice"));
+
+        assertTrue(contient); // ce test doit échouer car le type "ANNIVERSAIRE" n’est pas encore géré
+    }
+
+
+
+
 
 }

@@ -45,6 +45,20 @@ public class DateEvenement {
         );
     }
 
+    public DateEvenement minusDays(int jours) {
+        LocalDateTime nouvelleDate = this.toLocalDateTime().minusDays(jours);
+        return new DateEvenement(
+                nouvelleDate.getYear(),
+                nouvelleDate.getMonthValue(),
+                nouvelleDate.getDayOfMonth(),
+                nouvelleDate.getHour(),
+                nouvelleDate.getMinute()
+        );
+    }
+
+
+
+
 
 
 }
