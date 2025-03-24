@@ -51,21 +51,24 @@ public class GestionConsole {
                     "Pierre", "KiRouhl"
             );
 
-            Optional.ofNullable(utilisateursFixes.get(nom))
+            // Essayons les fixes
+            Optional<Utilisateur> fixe = Optional.ofNullable(utilisateursFixes.get(nom))
                     .map(mdpCorrect -> {
                         String mdpSaisi = lireChamp("Mot de passe: ", scanner);
                         return mdpCorrect.equals(mdpSaisi) ? new Utilisateur(nom, mdpSaisi) : null;
-                    })
-                    .ifPresent(utilisateurRef::set);
+                    });
 
-            if (utilisateurRef.get() == null) {
-                String mdpSaisi = lireChamp("Mot de passe: ", scanner);
-                utilisateurs.stream()
-                        .filter(u -> u.getNom().equals(nom) && u.verifierMotDePasse(mdpSaisi))
-                        .findFirst()
-                        .ifPresent(utilisateurRef::set);
-            }
+            // Sinon, cherchons dans la liste dynamique
+            Optional<Utilisateur> dynamique = fixe.isPresent() ? fixe : utilisateurs.stream()
+                    .map(u -> lireChamp("Mot de passe: ", scanner))
+                    .flatMap(mdpSaisi -> utilisateurs.stream()
+                            .filter(u -> u.getNom().equals(nom) && u.verifierMotDePasse(mdpSaisi)))
+                    .findFirst();
+
+            // Met à jour la référence si trouvé
+            fixe.or(() -> dynamique).ifPresent(utilisateurRef::set);
         });
+
 
         actions.put("2", () -> {
             String nom = lireChamp("Nom d'utilisateur: ", scanner);
@@ -100,8 +103,7 @@ public class GestionConsole {
     }
 
 
-    public static void boucleUtilisateur (Utilisateur utilisateur, Scanner scanner, CalendarManager
-            calendar, Runnable retourConnexion){
+    public static void boucleUtilisateur(Utilisateur utilisateur, Scanner scanner, CalendarManager calendar, Runnable retourConnexion) {
         System.out.println("\nBonjour, " + utilisateur);
         System.out.println("=== Menu Gestionnaire d'Événements ===");
         System.out.println("1 - Voir les événements");
@@ -118,21 +120,23 @@ public class GestionConsole {
         actions.put("2", () -> ajouterRdvPersonnel(calendar, scanner, utilisateur));
         actions.put("3", () -> ajouterReunion(calendar, scanner, utilisateur));
         actions.put("4", () -> ajouterPeriodique(calendar, scanner, utilisateur));
-        actions.put("5", () -> {
-            System.out.println("Déconnexion ! Voulez-vous continuer ? (oui / non)");
-            if (scanner.nextLine().trim().equalsIgnoreCase("oui")) {
-                retourConnexion.run();
-            } else {
-                System.exit(0);
-            }
-        });
+        actions.put("5", () -> Optional.ofNullable(lireChamp("Déconnexion ! Voulez-vous continuer ? (oui / non)", scanner))
+                .filter(rep -> rep.trim().equalsIgnoreCase("oui"))
+                .ifPresentOrElse(
+                        rep -> retourConnexion.run(),
+                        () -> System.exit(0)
+                ));
 
-        actions.getOrDefault(choix, () -> System.out.println("Choix invalide")).run();
+        Optional.ofNullable(actions.get(choix))
+                .orElse(() -> System.out.println("Choix invalide"))
+                .run();
 
-        if (!choix.equals("5")) {
-            boucleUtilisateur(utilisateur, scanner, calendar, retourConnexion);
-        }
+        // récursion tant qu'on ne choisit pas 5
+        Optional.of(choix)
+                .filter(c -> !c.equals("5"))
+                .ifPresent(c -> boucleUtilisateur(utilisateur, scanner, calendar, retourConnexion));
     }
+
 
 
 
