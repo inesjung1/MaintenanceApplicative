@@ -11,6 +11,7 @@ public class EventFactory {
             case "RDV_PERSONNEL" -> new PersonalMeeting(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes());
             case "REUNION" -> new Reunion(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes(), lieu, new Participants(participants));
             case "PERIODIQUE" -> new PeriodicEvent(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes(), frequenceJours);
+            case "ANNIVERSAIRE" -> new AnniversaireEvent(title, new Owner(proprietaire), dateDebut, dureeMinutes.enMinutes(), lieu, new Participants(participants));
             default -> throw new IllegalArgumentException("Type d'événement inconnu : " + type);
         };
     }
