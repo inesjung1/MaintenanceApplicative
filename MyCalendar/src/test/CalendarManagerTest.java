@@ -82,4 +82,26 @@ public class CalendarManagerTest {
         assertTrue(calendarManager.conflit(event1, event2));
     }
 
+    @Test
+    public void testSuppressionEvenementParId() {
+        CalendarManager calendar = new CalendarManager();
+
+        Title titre = new Title("Test Suppression");
+        DateEvenement date = new DateEvenement(2025, 4, 1, 10, 0);
+        Duree duree = new Duree(60);
+        Location lieu = new Location("Salle X");
+
+        Event event = new EventFactory().creerEvent("RDV_PERSONNEL", titre, "Alice", date, duree, lieu, "", 0);
+
+        calendarManager.getListeEvents().getEvents().add(event);
+
+        String id = event.getId().getValue();
+
+        boolean supprime = calendar.supprimerEventParId(id);
+
+        assertTrue(supprime);
+        assertFalse(calendar.getListeEvents().getEvents().contains(event));
+    }
+
+
 }
