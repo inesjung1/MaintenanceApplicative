@@ -1,4 +1,5 @@
 import event.Event;
+import event.EventFactory;
 import type.*;
 
 import java.time.LocalDateTime;
@@ -212,11 +213,24 @@ public class GestionConsole {
         Duree duree = new Duree(Integer.parseInt(lireChamp("Durée (en minutes) :", scanner)));
         Location lieu = new Location("");
 
+        Event eventTemporaire = new EventFactory().creerEvent(
+                "RDV_PERSONNEL", titre, utilisateur.getNom(), date, duree, lieu, "", 0
+        );
+
+        boolean conflit = calendar.getListeEvents().getEvents().stream()
+                .anyMatch(e -> calendar.conflit(e, eventTemporaire));
+
+        if (conflit) {
+            System.out.println("Conflit détecté : Vous avez déjà un événement à ce moment-là !");
+            return;
+        }
+
         calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur.getNom(),
                 date, duree, lieu, "", 0);
 
         System.out.println("Événement ajouté.");
     }
+
 
 
     public static void ajouterReunion(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {

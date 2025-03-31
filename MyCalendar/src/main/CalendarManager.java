@@ -43,5 +43,7 @@ public class CalendarManager {
                 && end1.isAfter(start2);
     }
 
-
+    public ListeEvents getListeEvents() {
+        return listeEvents;
+    }
 }
