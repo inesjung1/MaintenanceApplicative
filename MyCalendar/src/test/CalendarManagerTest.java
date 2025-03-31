@@ -49,25 +49,6 @@ public class CalendarManagerTest {
         assertEquals(2, events.size());
     }
 
-    //impletenter plus tard
-    /*
-    @Test
-    public void testConflit() {
-        DateEvenement dateDebut1 = new DateEvenement(2023, 10, 10, 10, 0);
-        DateEvenement dateDebut2 = new DateEvenement(2023, 10, 10, 10, 30);
-        Duree duree1 = new Duree(30);
-        Duree duree2 = new Duree(60);
-        Title title1 = new Title("Dentist");
-        Title title2 = new Title("Meeting");
-        Location lieu = new Location("");
-        Event event1 = new EventFactory().creerEvent("RDV_PERSONNEL", title1, "Alice", dateDebut1, duree1, lieu, "", 0);
-        Event event2 = new EventFactory().creerEvent("RDV_PERSONNEL", title2, "Bob", dateDebut2, duree2, lieu, "", 0);
-
-        assertTrue(calendarManager.conflit(event1, event2));
-    }
-
-     */
-
     @Test
     public void testAjoutEvenementAnniversaire() {
         CalendarManager manager = new CalendarManager();
@@ -86,8 +67,19 @@ public class CalendarManagerTest {
         assertTrue(contient); // ce test doit échouer car le type "ANNIVERSAIRE" n’est pas encore géré
     }
 
+    @Test
+    public void testConflit() {
+        DateEvenement dateDebut1 = new DateEvenement(2023, 10, 10, 10, 0); // 10h00 à 10h30
+        DateEvenement dateDebut2 = new DateEvenement(2023, 10, 10, 10, 15);
+        Duree duree1 = new Duree(30);
+        Duree duree2 = new Duree(60);
+        Title title1 = new Title("Dentist");
+        Title title2 = new Title("Meeting");
+        Location lieu = new Location("");
+        Event event1 = new EventFactory().creerEvent("RDV_PERSONNEL", title1, "Alice", dateDebut1, duree1, lieu, "", 0);
+        Event event2 = new EventFactory().creerEvent("RDV_PERSONNEL", title2, "Bob", dateDebut2, duree2, lieu, "", 0);
 
-
-
+        assertTrue(calendarManager.conflit(event1, event2));
+    }
 
 }

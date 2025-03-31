@@ -33,14 +33,11 @@ public class CalendarManager {
     }
 
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime start1 = e1.dateDebut.toLocalDateTime();
-        LocalDateTime end1 = start1.plusMinutes(e1.dureeMinutes);
-        LocalDateTime start2 = e2.dateDebut.toLocalDateTime();
-        LocalDateTime end2 = start2.plusMinutes(e2.dureeMinutes);
+        //a completer
+        return false;
 
-        return !(e1 instanceof PeriodicEvent || e2 instanceof PeriodicEvent)
-                && start1.isBefore(end2)
-                && end1.isAfter(start2);
+
+
     }
 
 
