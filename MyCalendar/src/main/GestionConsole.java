@@ -150,7 +150,8 @@ public class GestionConsole {
         System.out.println("2 - Afficher les événements d'un MOIS précis");
         System.out.println("3 - Afficher les événements d'une SEMAINE précise");
         System.out.println("4 - Afficher les événements d'un JOUR précis");
-        System.out.println("5 - Retour");
+        System.out.println("5 - Afficher les événements entre deux dates");
+        System.out.println("6 - Retour");
 
         String choix = lireChamp("Votre choix : ", scanner);
 
@@ -183,6 +184,8 @@ public class GestionConsole {
             LocalDateTime fin = debut.plusDays(1).minusSeconds(1);
             afficherListe(calendar.eventsDansPeriode(debut, fin));
         });
+
+        affichages.put("5", () -> afficherEntreDeuxDates(calendar, scanner));
 
         affichages.getOrDefault(choix, () -> {}).run();
     }
