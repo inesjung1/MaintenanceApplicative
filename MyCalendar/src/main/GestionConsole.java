@@ -187,6 +187,22 @@ public class GestionConsole {
         affichages.getOrDefault(choix, () -> {}).run();
     }
 
+    public static void afficherEntreDeuxDates(CalendarManager calendar, Scanner scanner) {
+        System.out.println("Date de début :");
+        DateEvenement debut = lireDateEvenement(scanner);
+
+        System.out.println("Date de fin :");
+        DateEvenement fin = lireDateEvenement(scanner);
+
+        List<Event> resultats = calendar.eventsDansPeriode(
+                debut.toLocalDateTime(),
+                fin.toLocalDateTime()
+        );
+
+        afficherListe(resultats);
+    }
+
+
     public static void ajouterRdvPersonnel(CalendarManager calendar, Scanner scanner, Utilisateur utilisateur) {
         Title titre = new Title(lireChamp("Titre de l'événement :", scanner));
         DateEvenement date = lireDateEvenement(scanner);
