@@ -93,7 +93,7 @@ public class CalendarManagerTest {
 
         Event event = new EventFactory().creerEvent("RDV_PERSONNEL", titre, "Alice", date, duree, lieu, "", 0);
 
-        calendarManager.getListeEvents().getEvents().add(event);
+        calendar.getListeEvents().getEvents().add(event);
 
         String id = event.getId().getValue();
 

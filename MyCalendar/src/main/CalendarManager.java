@@ -43,6 +43,11 @@ public class CalendarManager {
                 && end1.isAfter(start2);
     }
 
+    public boolean supprimerEventParId(String id) {
+        return listeEvents.getEvents().removeIf(e -> e.getId().getValue().equals(id));
+    }
+
+
     public ListeEvents getListeEvents() {
         return listeEvents;
     }
