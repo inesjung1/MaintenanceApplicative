@@ -98,7 +98,7 @@ public class GestionConsole {
                 .ifPresentOrElse(
                         liste -> {
                             System.out.println("Événements trouvés : ");
-                            liste.forEach(e -> System.out.println("- " + e.description()));
+                            liste.forEach(e -> System.out.println("[ ID : " + e.getId() + " ] - " + e.description()));
                         },
                         () -> System.out.println("Aucun événement trouvé pour cette période.")
                 );
@@ -113,7 +113,8 @@ public class GestionConsole {
         System.out.println("3 - Ajouter une réunion");
         System.out.println("4 - Ajouter un évènement périodique");
         System.out.println("5 - Ajouter un anniversaire");
-        System.out.println("6 - Se déconnecter");
+        System.out.println("6 - Supprimer un événement par ID");
+        System.out.println("7 - Se déconnecter");
 
         String choix = lireChamp("Votre choix : ", scanner);
 
@@ -124,7 +125,8 @@ public class GestionConsole {
         actions.put("3", () -> ajouterReunion(calendar, scanner, utilisateur));
         actions.put("4", () -> ajouterPeriodique(calendar, scanner, utilisateur));
         actions.put("5", () -> ajouterAnniversaire(calendar, scanner, utilisateur));
-        actions.put("6", () -> Optional.ofNullable(lireChamp("Déconnexion ! Voulez-vous continuer ? (oui / non)", scanner))
+        actions.put("6", () -> supprimerEvenement(calendar, scanner));
+        actions.put("7", () -> Optional.ofNullable(lireChamp("Déconnexion ! Voulez-vous continuer ? (oui / non)", scanner))
                 .filter(rep -> rep.trim().equalsIgnoreCase("oui"))
                 .ifPresentOrElse(
                         rep -> retourConnexion.run(),
@@ -137,7 +139,7 @@ public class GestionConsole {
 
         // récursion tant qu'on ne choisit pas 6
         Optional.of(choix)
-                .filter(c -> !c.equals("6"))
+                .filter(c -> !c.equals("7"))
                 .ifPresent(c -> boucleUtilisateur(utilisateur, scanner, calendar, retourConnexion));
     }
 
@@ -297,5 +299,18 @@ public class GestionConsole {
 
         System.out.println("Anniversaire ajouté !");
     }
+
+    public static void supprimerEvenement(CalendarManager calendar, Scanner scanner) {
+        String id = lireChamp("ID de l'événement à supprimer :", scanner);
+
+        boolean supprimé = calendar.supprimerEventParId(id);
+
+        if (supprimé) {
+            System.out.println("Événement supprimé avec succès.");
+        } else {
+            System.out.println("Aucun événement trouvé avec cet identifiant.");
+        }
+    }
+
 
 }

@@ -23,7 +23,7 @@ public class ListeEvents {
     }
 
     public void afficherEvenements() {
-        events.forEach(event -> System.out.println(event.description()));
+        events.forEach(event -> System.out.println("[ ID : " + event.getId() + " ] - " + event.description()));
     }
 
     public List<Event> getEvents() {
